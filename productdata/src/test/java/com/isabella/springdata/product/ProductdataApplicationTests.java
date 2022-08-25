@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -60,5 +61,47 @@ class ProductdataApplicationTests {
     @Test
     public void testCount() {
         System.out.println("Total records: " + repository.count());
+    }
+
+    @Test
+    public void testFindByName() {
+        List<Product> products = repository.findByName("IWatch");
+        products.forEach(p->System.out.println(p.getPrice()));
+    }
+
+    @Test
+    public void testFindByNameAndDesc() {
+        List<Product> products = repository.findByNameAndDesc("IWatch", "From Apple Inc");
+        products.forEach(p->System.out.println(p.getPrice()));
+    }
+
+    @Test
+    public void testFindByPriceGreaterThan() {
+        List<Product> products = repository.findByPriceGreaterThan(700d);
+        products.forEach(p->System.out.println(p.getPrice()));
+    }
+
+    @Test
+    public void testFindByDescContains() {
+        List<Product> products = repository.findByDescContains("Apple");
+        products.forEach(p->System.out.println(p.getName()));
+    }
+
+    @Test
+    public void testFindByPriceBetween() {
+        List<Product> products = repository.findByPriceBetween(1000d, 2000d);
+        products.forEach(p->System.out.println(p.getPrice()));
+    }
+
+    @Test
+    public void testFindByDescLike() {
+        List<Product> products = repository.findByDescLike("%Dyson%");
+        products.forEach(p->System.out.println(p.getName()));
+    }
+
+    @Test
+    public void testFindByIdIn() {
+        List<Product> products = repository.findByIdIn(Arrays.asList(1,3));
+        products.forEach(p->System.out.println(p.getName()));
     }
 }
