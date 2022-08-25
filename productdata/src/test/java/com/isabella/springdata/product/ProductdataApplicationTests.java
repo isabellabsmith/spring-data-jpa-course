@@ -5,6 +5,10 @@ import com.isabella.springdata.product.repos.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.Arrays;
 import java.util.List;
@@ -101,7 +105,39 @@ class ProductdataApplicationTests {
 
     @Test
     public void testFindByIdIn() {
-        List<Product> products = repository.findByIdIn(Arrays.asList(1,3));
+        List<Product> products = repository.findByIdIn(Arrays.asList(1,3,2,3,4,5,6), PageRequest.of(0, 4));
         products.forEach(p->System.out.println(p.getName()));
+    }
+
+    @Test
+    public void testFindAllPaging() {
+        Pageable pageable = PageRequest.of(0, 3);
+
+        Page<Product> results = repository.findAll(pageable);
+        results.forEach(p->System.out.println(p.getName()));
+    }
+
+    @Test
+    public void testFindAllSorting() {
+        repository.findAll(Sort.by("name"))
+                        .forEach(p->System.out.println(p.getName()));
+    }
+
+    @Test
+    public void testFindAllSortingByTwoProperties() {
+        repository.findAll(Sort.by(Sort.Direction.DESC,"name", "price"))
+                .forEach(p->System.out.println(p.getName() + " " + p.getPrice()));
+    }
+
+    @Test
+    public void testFindAllSortingByOrder() {
+        repository.findAll(Sort.by(new Sort.Order(Sort.Direction.DESC,"name"), new Sort.Order(null, "price")))
+                .forEach(p->System.out.println(p.getName() + " " + p.getPrice()));
+    }
+
+    @Test
+    public void testFindAllPagingAndSorting() {
+        Pageable pageable = PageRequest.of(0, 3, Sort.Direction.DESC, "name");
+        repository.findAll(pageable).forEach(p->System.out.println(p.getName()));
     }
 }
