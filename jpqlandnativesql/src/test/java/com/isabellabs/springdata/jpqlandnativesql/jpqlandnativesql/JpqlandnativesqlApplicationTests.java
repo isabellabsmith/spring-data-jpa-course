@@ -59,4 +59,14 @@ class JpqlandnativesqlApplicationTests {
 	void testDeleteStudentsByFirstName() {
 		repository.deleteStudentsByFirstName("Jane");
 	}
+
+	@Test
+	void testFindAllStudentsNQ() {
+		System.out.println(repository.findAllStudentsNQ());
+	}
+
+	@Test
+	void testFindByFirstNameNQ() {
+		System.out.println(repository.findByFirsName("Jane"));
+	}
 }
